@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding/data/colors.dart';
-import 'package:wedding/services/auth_service.dart';
+import 'package:wedding/services/mobile/auth_service.dart';
 import 'package:wedding/widgets/mobile/components/textfield.dart';
 import 'package:wedding/widgets/mobile/pages/complete_page.dart';
 import 'package:wedding/widgets/mobile/pages/root_page.dart';
@@ -99,12 +99,19 @@ class SignInPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         try {
-                          final response = await AuthService.signIn(emailController.text, passwordController.text);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const RootPage()));
+                          final response = await AuthService.signIn(
+                            context.read<SignInPageBloc>().state.email,
+                            context.read<SignInPageBloc>().state.password,
+                          );
+                          if (response == null) {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const CompletePage()));
+                          } else {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const RootPage()));
+                          }
                         } catch (error) {
                           showDialog(
                             context: context,
-                            builder: (context) => Dialog(child: ErrorPopup(error: '$error')),
+                            builder: (context) => Dialog(child: ErrorPopup(title: '로그인 실패', error: '$error')),
                           );
                         }
                       },

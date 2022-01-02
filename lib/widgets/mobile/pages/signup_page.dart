@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding/data/colors.dart';
 import 'package:wedding/data/models.dart';
-import 'package:wedding/services/auth_service.dart';
-import 'package:wedding/services/user_service.dart';
+import 'package:wedding/services/mobile/auth_service.dart';
+import 'package:wedding/services/mobile/user_service.dart';
 import 'package:wedding/widgets/mobile/components/textfield.dart';
 import 'package:wedding/widgets/mobile/pages/profile_page.dart';
+import 'package:wedding/widgets/mobile/popups/error_popup.dart';
 
 enum PhoneAuthorizeStep { init, sent, authorized, failed }
 
@@ -80,10 +81,6 @@ class SignUpPageBloc extends Cubit<SignUpPageState> {
 
   Future<void> authorizeCode(String code) async {
     emit(state.copyWith(phoneAuthorizeStep: PhoneAuthorizeStep.authorized));
-  }
-
-  Future<void> signup(User user) async {
-    await AuthService.signUp(user, state.password);
   }
 }
 
@@ -301,8 +298,15 @@ class SignUpPage extends StatelessWidget {
                       builder: (context) => ProfilePage(
                         user: User.profile(email: state.email, name: state.name, phone: state.phone),
                         onButtonDown: (user) async {
-                          await blocContext.read<SignUpPageBloc>().signup(user);
-                          Navigator.pop(context, user);
+                          try {
+                            await AuthService.signUp(user, state.password);
+                            Navigator.pop(context, user);
+                          } catch (error) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(child: ErrorPopup(title: '회원가입 실패', error: '$error')),
+                            );
+                          }
                         },
                       ),
                     ),

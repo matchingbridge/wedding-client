@@ -7,7 +7,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:wedding/data/colors.dart';
 import 'package:wedding/data/enums.dart';
 import 'package:wedding/data/models.dart';
-import 'package:wedding/services/address_service.dart';
+import 'package:wedding/services/mobile/address_service.dart';
 import 'package:wedding/widgets/mobile/components/date.dart';
 import 'package:wedding/widgets/mobile/components/radio.dart';
 import 'package:wedding/widgets/mobile/components/select.dart';

@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding/data/colors.dart';
 import 'package:wedding/data/enums.dart';
 import 'package:wedding/data/models.dart';
-import 'package:wedding/services/match_service.dart';
+import 'package:wedding/services/mobile/match_service.dart';
 import 'package:wedding/widgets/mobile/components/select.dart';
 
 class MatchPageState {

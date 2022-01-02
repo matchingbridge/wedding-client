@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:wedding/data/enums.dart';
-import 'package:wedding/services/base_service.dart';
+import 'package:wedding/services/mobile/base_service.dart';
 
 class YM {
   final int year;
@@ -302,7 +302,7 @@ class User {
         'salary': salary.index,
         'distance': distance,
         'period': period.toString(),
-        'partner_characters': partnerCharacters.map((e) => e.index).toList(),
+        'partner_characters': partnerCharacters.map((e) => e.index).toList().join(', '),
         'vehicle': vehicle,
       };
 }
@@ -542,4 +542,67 @@ class Address {
   Area area;
   String address;
   Address({required this.area, required this.address});
+}
+
+class UserAuth {
+  String userID;
+  int authID;
+  String email;
+  String name;
+  String phone;
+
+  Area area;
+  Gender gender;
+  Marriage marriage;
+  int height;
+  int weight;
+  bool smoke;
+  bool drink;
+  Religion religion;
+  BodyType bodytype;
+  Character character;
+  Scholar scholar;
+  Job job;
+  DateTime? reviewedAt;
+
+  UserAuth({
+    required this.userID,
+    required this.authID,
+    required this.email,
+    required this.name,
+    required this.phone,
+    required this.area,
+    required this.gender,
+    required this.marriage,
+    required this.height,
+    required this.weight,
+    required this.smoke,
+    required this.drink,
+    required this.religion,
+    required this.bodytype,
+    required this.character,
+    required this.scholar,
+    required this.job,
+    this.reviewedAt,
+  });
+
+  UserAuth.fromJSON(Map<String, dynamic> json)
+      : userID = json['user_id'],
+        authID = json['auth_id'],
+        email = json['email'],
+        name = json['name'],
+        phone = json['phone'],
+        area = Area.values[json['area']],
+        gender = Gender.values[json['gender']],
+        marriage = Marriage.values[json['marriage']],
+        height = json['height'],
+        weight = json['weight'],
+        smoke = json['smoke'],
+        drink = json['drink'],
+        religion = Religion.values[json['religion'] as int],
+        bodytype = BodyType.values[json['bodytype'] as int],
+        character = Character.values[json['character'] as int],
+        scholar = Scholar.values[json['scholar'] as int],
+        job = Job.values[json['job'] as int],
+        reviewedAt = json['reviewed_at'] != null ? DateTime.parse(json['reviewed_at']) : null;
 }

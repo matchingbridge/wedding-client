@@ -1,5 +1,5 @@
 import 'package:wedding/data/models.dart';
-import 'package:wedding/services/base_service.dart';
+import 'package:wedding/services/mobile/base_service.dart';
 
 class MatchService extends BaseService {
   static Future<Match> getMatch(String partnerID) async {

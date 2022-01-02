@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding/data/colors.dart';
 import 'package:wedding/widgets/mobile/pages/signin_page.dart';
+import 'package:wedding/widgets/splash_page.dart';
 
 class SplashPageState {}
 
@@ -13,8 +14,8 @@ class SplashPageBloc extends Cubit<SplashPageState> {
   }
 }
 
-class SplashPage extends StatelessWidget {
-  const SplashPage({Key? key}) : super(key: key);
+class SplashPageMobile extends SplashPage {
+  const SplashPageMobile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,3 +41,5 @@ class SplashPage extends StatelessWidget {
     );
   }
 }
+
+SplashPage getSplashPage() => const SplashPageMobile();

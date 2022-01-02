@@ -1,17 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:wedding/data/models.dart';
-import 'package:wedding/services/base_service.dart';
-import 'package:http_parser/http_parser.dart';
+import 'package:wedding/services/mobile/base_service.dart';
 
 class AuthService extends BaseService {
-  static Future<Authorization> signIn(String email, String password) async {
+  static Future<Authorization?> signIn(String email, String password) async {
     final options = BaseOptions(validateStatus: (status) => true);
     final response = await Dio(options).post('$host/auth/signin', data: {'email': email, 'password': password});
     switch (response.statusCode) {
       case HttpStatus.ok:
         return Authorization.fromJSON(response.data);
+      case HttpStatus.accepted:
+        return null;
       case HttpStatus.notFound:
         throw response.data;
       default:
@@ -20,18 +22,21 @@ class AuthService extends BaseService {
   }
 
   static Future<void> signUp(User user, String password) async {
-    final options = BaseOptions(validateStatus: (status) => true);
-    final userJSON = user.toJSON();
+    final options = BaseOptions(
+      validateStatus: (status) => true,
+      headers: {HttpHeaders.contentTypeHeader: 'Content-Type:multipart/form-data'},
+    );
+    final userJSON = jsonEncode(user.toJSON());
     final response = await Dio(options).post(
       '$host/auth/signup',
       data: FormData.fromMap({
         'user': userJSON,
         'password': password,
-        'face1': MultipartFile.fromFile(user.face1, filename: 'face1'),
-        'face2': MultipartFile.fromFile(user.face2, filename: 'face2'),
-        'body1': MultipartFile.fromFile(user.body1, filename: 'body1'),
-        'body2': MultipartFile.fromFile(user.body2, filename: 'body2'),
-        'video': MultipartFile.fromFile(user.video, filename: 'video'),
+        'face1': await MultipartFile.fromFile(user.face1, filename: 'face1'),
+        'face2': await MultipartFile.fromFile(user.face2, filename: 'face2'),
+        'body1': await MultipartFile.fromFile(user.body1, filename: 'body1'),
+        'body2': await MultipartFile.fromFile(user.body2, filename: 'body2'),
+        'video': await MultipartFile.fromFile(user.video, filename: 'video'),
       }),
     );
     switch (response.statusCode) {
