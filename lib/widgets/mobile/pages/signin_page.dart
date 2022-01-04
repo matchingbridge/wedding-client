@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding/data/colors.dart';
 import 'package:wedding/services/mobile/auth_service.dart';
 import 'package:wedding/widgets/mobile/components/textfield.dart';
@@ -65,8 +68,6 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
     return BlocProvider(
       child: Scaffold(
         body: SafeArea(
@@ -106,6 +107,13 @@ class SignInPage extends StatelessWidget {
                           if (response == null) {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const CompletePage()));
                           } else {
+                            final preferences = await SharedPreferences.getInstance();
+                            await Future.wait([
+                              preferences.setString('access_token', response.accessToken),
+                              preferences.setString('refresh_token', response.refreshToken),
+                              preferences.setInt('expires_at', response.expiresAt),
+                            ]);
+                            AuthService.accessToken = response.accessToken;
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const RootPage()));
                           }
                         } catch (error) {

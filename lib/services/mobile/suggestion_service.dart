@@ -2,8 +2,8 @@ import 'package:wedding/data/models.dart';
 import 'package:wedding/services/mobile/base_service.dart';
 
 class SuggestionService extends BaseService {
-  Future<Suggestion> getMatch() async {
-    final response = await BaseService.http.get('/suggestion');
-    return Suggestion.fromJSON(response.data);
+  static Future<List<Suggestion>> getSuggestions() async {
+    final response = await BaseService.authHttp.get('/suggestion');
+    return ((response.data as List?) ?? []).map((e) => Suggestion.fromJSON(e)).toList();
   }
 }

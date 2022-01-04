@@ -75,6 +75,8 @@ class User {
   List<Character> partnerCharacters;
   String vehicle;
 
+  get age => DateTime.now().year - birthday.year + 1;
+
   User({
     required this.userID,
     required this.email,
@@ -264,8 +266,8 @@ class User {
         employment = Employment.values[json['employment'] as int],
         salary = Salary.values[json['salary'] as int],
         distance = json['distance'],
-        period = YMD.fromString(json['period']),
-        partnerCharacters = ((json['partner_characters'] as List?) ?? []).map<Character>((e) => Character.values[int.parse(e)]).toList(),
+        period = YM.fromString(json['period']),
+        partnerCharacters = (json['partner_characters'] as String).split(',').map((e) => Character.values[int.parse(e)]).toList(),
         vehicle = json['vehicle'];
 
   Map<String, dynamic> toJSON() => {
@@ -302,7 +304,7 @@ class User {
         'salary': salary.index,
         'distance': distance,
         'period': period.toString(),
-        'partner_characters': partnerCharacters.map((e) => e.index).toList().join(', '),
+        'partner_characters': partnerCharacters.map((e) => e.index).toList().join(','),
         'vehicle': vehicle,
       };
 }
@@ -522,7 +524,7 @@ class Suggestion {
   Suggestion.fromJSON(Map<String, dynamic> json)
       : userID = json['user_id'],
         partnerID = json['partner_id'],
-        suggestedAt = json['suggested_at'];
+        suggestedAt = DateTime.parse(json['suggested_at']);
 }
 
 class Authorization {

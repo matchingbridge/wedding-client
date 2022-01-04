@@ -2,12 +2,12 @@ import 'package:wedding/data/models.dart';
 import 'package:wedding/services/mobile/base_service.dart';
 
 class DetailService extends BaseService {
-  Future<Detail> getDetail() async {
+  static Future<Detail> getDetail() async {
     final response = await BaseService.http.get('/detail');
     return Detail.fromJSON(response.data);
   }
 
-  Future<Detail> makeChat(Detail detail) async {
+  static Future<Detail> makeChat(Detail detail) async {
     final response = await BaseService.http.post('/detail', data: detail.toJSON());
     return Detail.fromJSON(response.data);
   }

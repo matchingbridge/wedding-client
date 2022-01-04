@@ -4,7 +4,7 @@ import 'package:wedding/data/colors.dart';
 import 'package:wedding/data/models.dart';
 import 'package:wedding/services/mobile/match_service.dart';
 import 'package:wedding/widgets/mobile/pages/chat_page.dart';
-import 'package:wedding/widgets/mobile/pages/match_page.dart';
+import 'package:wedding/widgets/mobile/pages/user_page.dart';
 
 class HistoryPageState {
   List<Match> matched;
@@ -46,7 +46,7 @@ class HistoryPage extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const MatchPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => UserPage(userID: user.receiverID)));
       },
     );
   }

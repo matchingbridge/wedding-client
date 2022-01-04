@@ -7,6 +7,11 @@ class UserService extends BaseService {
     return User.fromJSON(response.data);
   }
 
+  static Future<User> getPartner(String partnerID) async {
+    final response = await BaseService.authHttp.get('/user/$partnerID');
+    return User.fromJSON(response.data);
+  }
+
   static Future<bool> checkEmail(String email) async {
     final response = await BaseService.http.get('/user/email/$email');
     return response.data as bool;

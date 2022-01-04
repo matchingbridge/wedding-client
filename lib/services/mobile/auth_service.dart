@@ -6,9 +6,10 @@ import 'package:wedding/data/models.dart';
 import 'package:wedding/services/mobile/base_service.dart';
 
 class AuthService extends BaseService {
+  static String accessToken = '';
+
   static Future<Authorization?> signIn(String email, String password) async {
-    final options = BaseOptions(validateStatus: (status) => true);
-    final response = await Dio(options).post('$host/auth/signin', data: {'email': email, 'password': password});
+    final response = await BaseService.http.post('$host/auth/signin', data: {'email': email, 'password': password});
     switch (response.statusCode) {
       case HttpStatus.ok:
         return Authorization.fromJSON(response.data);
@@ -22,12 +23,8 @@ class AuthService extends BaseService {
   }
 
   static Future<void> signUp(User user, String password) async {
-    final options = BaseOptions(
-      validateStatus: (status) => true,
-      headers: {HttpHeaders.contentTypeHeader: 'Content-Type:multipart/form-data'},
-    );
     final userJSON = jsonEncode(user.toJSON());
-    final response = await Dio(options).post(
+    final response = await BaseService.http.post(
       '$host/auth/signup',
       data: FormData.fromMap({
         'user': userJSON,

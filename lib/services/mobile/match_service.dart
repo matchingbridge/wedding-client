@@ -3,31 +3,31 @@ import 'package:wedding/services/mobile/base_service.dart';
 
 class MatchService extends BaseService {
   static Future<Match> getMatch(String partnerID) async {
-    final response = await BaseService.http.get('/match', queryParameters: {'partner_id': partnerID});
+    final response = await BaseService.authHttp.get('/match', queryParameters: {'partner_id': partnerID});
     return Match.fromJSON(response.data);
   }
 
   static Future<Match> askMatch(String partnerID) async {
-    final response = await BaseService.http.post('/match/ask/$partnerID');
+    final response = await BaseService.authHttp.post('/match/ask/$partnerID');
     return Match.fromJSON(response.data);
   }
 
   static Future<Match> answerMatch(String partnerID) async {
-    final response = await BaseService.http.post('/match/answer/$partnerID');
+    final response = await BaseService.authHttp.post('/match/answer/$partnerID');
     return Match.fromJSON(response.data);
   }
 
   static Future<void> terminateMatch(String partnerID) async {
-    await BaseService.http.post('/match/terminate/$partnerID');
+    await BaseService.authHttp.post('/match/terminate/$partnerID');
   }
 
   static Future<List<Match>> getMatched() async {
-    final response = await BaseService.http.get('/match/matched');
+    final response = await BaseService.authHttp.get('/match/matched');
     return ((response.data as List?) ?? []).map((e) => Match.fromJSON(e)).toList();
   }
 
   static Future<List<Match>> getUnmatched() async {
-    final response = await BaseService.http.get('/match/unmatched');
+    final response = await BaseService.authHttp.get('/match/unmatched');
     return ((response.data as List?) ?? []).map((e) => Match.fromJSON(e)).toList();
   }
 }
